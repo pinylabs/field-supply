@@ -1,0 +1,16 @@
+{
+  "name": "Field Supply",
+  "line": "A dark, wide-type EmDash shop for a small clothing label, its products, cart and checkout from Shopify.",
+  "kind": "emdash",
+  "category": "commerce",
+  "stacks": [
+    "astro",
+    "emdash",
+    "shopify"
+  ],
+  "status": "preview",
+  "demo": null,
+  "preview": null,
+  "licence": "MIT",
+  "basedOn": "EmDash starter-cloudflare template, 1.4.0 (MIT, Cloudflare)"
+}
