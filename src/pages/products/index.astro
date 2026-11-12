@@ -17,34 +17,45 @@ if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 ---
 
 <Base title="Shop">
-	<h1>Shop</h1>
-	<p>Stock, sizes and checkout are Shopify's; each product's story is told here.</p>
+	<div class="page-head">
+		<h1>Shop</h1>
+		<p>Stock, sizes and checkout are Shopify's; each product's story is told here.</p>
+	</div>
 
 	{
 		products.length === 0 ? (
-			<p>No products yet.</p>
+			<p class="py-10 text-body leading-body text-secondary-400">No products yet.</p>
 		) : (
-			<ul>
+			<ul class="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4.5 lg:grid-cols-4">
 				{products.map((product) => (
-					<li>
+					<li class="card reveal">
 						<a href={`/products/${product.id}`}>
-							{product.data.image && (
-								<div {...product.edit.image}><Image image={product.data.image} /></div>
-							)}
-							<h2 {...product.edit.title}>{product.data.title}</h2>
+							<div class="frame aspect-3/4" style={`view-transition-name: product-${product.id}`}>
+								{product.data.image && (
+									<div {...product.edit.image}><Image image={product.data.image} /></div>
+								)}
+								{product.data.hover_image && (
+									<div class="card-alt" {...product.edit.hover_image}><Image image={product.data.hover_image} alt="" /></div>
+								)}
+							</div>
+							<h2 class="mt-3 text-card" {...product.edit.title}>{product.data.title}</h2>
 						</a>
-						{product.data.price && <p {...product.edit.price}>{product.data.price}</p>}
-						{product.data.note && <p {...product.edit.note}>{product.data.note}</p>}
+						{(product.data.note || product.data.price) && (
+							<div class="mt-1 flex justify-between gap-3 text-label text-secondary-400">
+								<span {...product.edit.note}>{product.data.note}</span>
+								<b class="font-medium text-secondary-50" {...product.edit.price}>{product.data.price}</b>
+							</div>
+						)}
 					</li>
 				))}
 			</ul>
 		)
 	}
-	<nav aria-label="Pagination">
+	<nav class="pagination" aria-label="Pagination">
 		{cursor && <a href="/products">First page</a>}
 		{
 			nextCursor && (
-				<a href={`/products?cursor=${encodeURIComponent(nextCursor)}`}>
+				<a class="next" href={`/products?cursor=${encodeURIComponent(nextCursor)}`}>
 					Next page
 				</a>
 			)

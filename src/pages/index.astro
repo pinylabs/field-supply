@@ -1,6 +1,7 @@
 ---
 // The preview home, from its accepted design. The full template is being built by the Pinies;
 // until then this page is the theme's home and the rest of the site is EmDash's own template.
+import "../styles/global.css";
 ---
 <!doctype html>
 <html lang="en">
@@ -10,177 +11,17 @@
 <title>Field Supply — clothes for the roof and the street</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
-<style is:global>
-/* The motion every site shares. Only transform and opacity move, so it stays on the compositor at 60 fps. Under
-   prefers-reduced-motion everything is still, and a browser without scroll timelines simply shows the page. */
-
-/* Page changes: the browser's cross-document view transition, as Astro's view transitions give it. A picture that
-   names itself the same on both pages grows into its place; the rest fades and slides. */
-@view-transition { navigation: auto; }
-::view-transition-old(root) { animation: 260ms cubic-bezier(.4, 0, 1, 1) both vt-out; }
-::view-transition-new(root) { animation: 420ms cubic-bezier(0, 0, .2, 1) 80ms both vt-in; }
-::view-transition-group(*) { animation-duration: 520ms; animation-timing-function: cubic-bezier(.2, .8, .2, 1); }
-@keyframes vt-out { to { opacity: 0; transform: translateY(-12px); } }
-@keyframes vt-in { from { opacity: 0; transform: translateY(24px); } }
-
-/* The hero's first moment: its words rise one line after another. */
-.rise { animation: rise .9s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i, 0) * 110ms + 120ms); }
-@keyframes rise { from { opacity: 0; transform: translateY(36px); } }
-
-/* Scroll-driven: reveals move with `translate` and `scale`, so a card's hover `transform` still applies.
-   The hero's photo drifts slower than the page, and its words lift away. */
-@supports (animation-timeline: scroll()) {
-  .parallax { animation: parallax linear both; animation-timeline: scroll(root); animation-range: 0 100vh; }
-  .lift { animation: lift linear both; animation-timeline: scroll(root); animation-range: 0 70vh; }
-  .reveal { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 70%; }
-  .reveal-side { animation: reveal-side linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; }
-  .zoom-in { animation: zoom-in linear both; animation-timeline: view(); animation-range: entry 0% cover 50%; }
-}
-@keyframes parallax { from { transform: translateY(0) scale(1.08); } to { transform: translateY(22%) scale(1.16); } }
-@keyframes lift { to { opacity: 0; transform: translateY(-90px); } }
-@keyframes reveal { from { opacity: 0; translate: 0 70px; scale: .97; } }
-@keyframes reveal-side { from { opacity: 0; translate: -60px 0; } }
-@keyframes zoom-in { from { transform: scale(1.25); } }
-
-/* Hover, for a site that takes it: a card lifts and its photo leans in. Each site adds its own signature beside it. */
-.lift-card { transition: transform .45s cubic-bezier(.2, .8, .2, 1), box-shadow .45s; }
-.lift-card .pic img { transition: transform .9s cubic-bezier(.2, .8, .2, 1); }
-.lift-card:hover { transform: translateY(-8px); }
-.lift-card:hover .pic img { transform: scale(1.07); }
-.button { transition: transform .25s cubic-bezier(.2, .8, .2, 1), background-color .25s; }
-.button:hover { transform: translateY(-2px); }
-
-/* Calm: opacity only, for a site whose signature is stillness. */
-@supports (animation-timeline: view()) {
-  .fade { animation: fade linear both; animation-timeline: view(); animation-range: entry 0% entry 90%; }
-}
-@keyframes fade { from { opacity: 0; } }
-
-/* The Pinies' entrances, the public site's four, played once when their row comes into view. */
-.pinies[data-entrance] .face { animation-duration: .9s; animation-fill-mode: both; animation-delay: calc(var(--i) * .14s); animation-timing-function: cubic-bezier(.3, .7, .3, 1); }
-.pinies[data-entrance='walk'] .face { animation-name: walk; }
-.pinies[data-entrance='skid'] .face { animation-name: skid; }
-.pinies[data-entrance='drop'] .face { animation-name: drop; animation-timing-function: ease-in; }
-.pinies[data-entrance='peek'] .face { animation-name: peek; }
-.pinies[data-entrance='peek'] .face:last-child { animation-name: peek, wave; animation-duration: .9s, .6s; animation-delay: calc(4 * .14s), 1.5s; animation-fill-mode: both, none; }
-.pinies:not([data-entrance]):not([data-shown]) .face { opacity: 0; }
-@keyframes walk {
-  0% { transform: translateX(-120px); opacity: 0; } 12% { opacity: 1; }
-  20% { transform: translateX(-96px) translateY(-4px); } 35% { transform: translateX(-70px) translateY(0); }
-  50% { transform: translateX(-44px) translateY(-4px); } 65% { transform: translateX(-16px) translateY(0); }
-  80% { transform: translateX(0) translateY(-16px); } 100% { transform: translateX(0) translateY(0); }
-}
-@keyframes skid {
-  0% { transform: translateX(520px) rotate(0); opacity: 0; } 15% { opacity: 1; }
-  65% { transform: translateX(-8px) rotate(-12deg); } 82% { transform: translateX(3px) rotate(3deg); } 100% { transform: translateX(0) rotate(0); }
-}
-@keyframes drop {
-  0% { transform: translateY(-120px); opacity: 0; } 15% { opacity: 1; }
-  60% { transform: translateY(0); } 75% { transform: translateY(-12px); } 90% { transform: translateY(0); } 95% { transform: translateY(-3px); } 100% { transform: translateY(0); }
-}
-@keyframes peek { 0% { transform: translateY(56px); opacity: 0; } 20% { opacity: 1; } 70% { transform: translateY(-5px); } 100% { transform: translateY(0); } }
-@keyframes wave { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-12deg); } 50% { transform: rotate(10deg); } 75% { transform: rotate(-6deg); } }
-
-/* Still: reduced motion, and the stills this mock renders. */
-@media (prefers-reduced-motion: reduce) {
-  @view-transition { navigation: none; }
-  *, *::before, *::after { animation: none !important; transition: none !important; }
-  .pinies .face { opacity: 1 !important; }
-}
-html.still *, html.still *::before, html.still *::after { animation: none !important; transition: none !important; }
-html.still .pinies .face { opacity: 1 !important; }
-</style>
-<style is:global>
-/* Dark-led in both schemes: a night street, one acid accent, wide type. */
-:root {
-  --ground: #0b0b0c; --ink: #f2f0ea; --soft: #9a978f; --line: #24242a; --card: #141417; --acid: #d4ff3a; --acid-ink: #101400;
-  --wide: 'Archivo', system-ui, sans-serif; --mono: 'IBM Plex Mono', ui-monospace, monospace;
-}
-@media (prefers-color-scheme: light) { :root { --ground: #161618; --card: #1d1d21; --line: #2e2e34; } }
-* { box-sizing: border-box; margin: 0; }
-html { background: var(--ground); }
-body { background: var(--ground); color: var(--ink); font-family: var(--mono); -webkit-font-smoothing: antialiased; overflow-x: clip; }
-a { color: inherit; text-decoration: none; }
-.wrap { max-width: 1320px; margin: 0 auto; padding: 0 40px; }
-header { border-bottom: 1px solid var(--line); }
-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 70px; }
-.mark { font-family: var(--wide); font-weight: 800; font-stretch: 125%; font-size: 22px; letter-spacing: .02em; text-transform: uppercase; }
-.mark b { color: var(--acid); }
-nav { display: flex; gap: 26px; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; align-items: center; }
-.cart { display: inline-flex; gap: 8px; align-items: center; border: 1px solid var(--line); padding: 8px 14px; border-radius: 999px; }
-.cart i { font-style: normal; background: var(--acid); color: var(--acid-ink); border-radius: 999px; min-width: 22px; height: 22px; display: inline-grid; place-items: center; font-weight: 600; }
-/* The signature: a headline wider than the screen over a marquee of the season that never stops, pausing under the pointer. */
-.hero { position: relative; padding: 40px 0 0; overflow: hidden; }
-.hero h1 { font-family: var(--wide); font-weight: 800; font-stretch: 125%; font-size: 150px; line-height: .82; letter-spacing: -.02em; text-transform: uppercase; white-space: nowrap; padding: 0 max(40px, calc((100vw - 1240px) / 2)); position: relative; z-index: 2; mix-blend-mode: difference; color: #fff; }
-.hero h1 span { display: block; }
-.hero h1 .slide { animation: slide-in 1.1s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i) * 140ms); }
-@keyframes slide-in { from { transform: translateX(-40%); opacity: 0; } }
-.marquee { margin-top: 28px; display: flex; gap: 14px; width: max-content; animation: run 38s linear infinite; }
-.hero:hover .marquee { animation-play-state: paused; }
-@keyframes run { to { transform: translateX(calc(-50% - 7px)); } }
-.marquee figure { width: 300px; aspect-ratio: 3 / 4; border-radius: 4px; overflow: hidden; flex: none; position: relative; }
-.marquee figure img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(1.05) contrast(1.05); }
-.marquee figcaption { position: absolute; left: 10px; bottom: 10px; background: var(--acid); color: var(--acid-ink); font-size: 12px; padding: 4px 8px; text-transform: uppercase; }
-.hero .intro { display: flex; justify-content: space-between; align-items: end; gap: 40px; padding: 34px max(40px, calc((100vw - 1240px) / 2)) 56px; }
-.hero .intro p { font-size: 15px; line-height: 1.6; color: var(--soft); max-width: 460px; }
-.hero .intro a { background: var(--acid); color: var(--acid-ink); padding: 16px 24px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; font-size: 14px; }
-.shop { border-top: 1px solid var(--line); padding: 56px 0 72px; }
-.shop .head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 26px; }
-.shop h2 { font-family: var(--wide); font-weight: 800; font-stretch: 125%; font-size: 44px; text-transform: uppercase; letter-spacing: -.01em; }
-.shop .head span { color: var(--soft); font-size: 13px; text-transform: uppercase; letter-spacing: .08em; }
-.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
-.item { position: relative; }
-.item .pic { position: relative; aspect-ratio: 3 / 4; background: var(--card); overflow: hidden; border-radius: 4px; }
-.item .pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .5s ease, transform .9s cubic-bezier(.2, .8, .2, 1); }
-.item .pic img + img { opacity: 0; }
-.item:hover .pic img + img { opacity: 1; transform: scale(1.03); }
-.item .add { position: absolute; left: 10px; right: 10px; bottom: 10px; background: var(--ink); color: var(--ground); text-align: center; padding: 12px; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; transform: translateY(140%); transition: transform .35s cubic-bezier(.2, .8, .2, 1); }
-.item:hover .add { transform: none; }
-.item h3 { font-family: var(--wide); font-weight: 700; font-stretch: 112%; font-size: 17px; text-transform: uppercase; margin-top: 12px; }
-.item .price { display: flex; justify-content: space-between; color: var(--soft); font-size: 13px; margin-top: 4px; }
-.item .price b { color: var(--ink); font-weight: 500; }
-.trust { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.trust .wrap { display: grid; grid-template-columns: repeat(3, 1fr); }
-.trust div { padding: 26px 0; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--soft); }
-.trust b { display: block; color: var(--ink); font-family: var(--wide); font-stretch: 112%; font-size: 18px; letter-spacing: 0; margin-bottom: 4px; }
-footer { padding: 40px 0 48px; }
-footer .wrap { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: end; }
-footer .made { display: flex; align-items: flex-end; gap: 18px; }
-.pinies { display: flex; }
-.pinies .face { width: 54px; height: 54px; margin-right: -8px; }
-.pinies .face svg { width: 100%; height: 100%; }
-footer .made p { font-size: 13px; line-height: 1.6; color: var(--soft); }
-footer .made a { color: var(--ink); text-decoration: underline; }
-footer .credits { font-size: 11px; line-height: 1.8; color: var(--soft); }
-footer .credits a { text-decoration: underline; text-decoration-color: var(--line); }
-@media (prefers-reduced-motion: reduce) { .marquee { animation: none; } }
-html.still .marquee { animation: none; }
-@media (max-width: 767px) {
-  .wrap { padding: 0 18px; }
-  nav a:not(.cart) { display: none; }
-  .mark { font-size: 17px; }
-  .hero h1 { font-size: 62px; padding: 0 18px; white-space: normal; }
-  .marquee { margin-top: 14px; }
-  .marquee figure { width: 190px; }
-  .hero .intro { flex-direction: column; align-items: start; padding: 26px 18px 40px; }
-  .shop h2 { font-size: 30px; }
-  .grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-  .item .add { transform: none; padding: 9px; font-size: 11px; }
-  .trust .wrap { grid-template-columns: 1fr; }
-  .trust div { padding: 16px 0; }
-  footer .wrap { grid-template-columns: 1fr; }
-  footer .made { flex-direction: column; align-items: flex-start; }
-}
-.still-card { height: 100%; display: grid; place-items: center; background: linear-gradient(135deg, var(--sky1, #bfe8ef), var(--sky2, #ffe2b8)); font-family: var(--display); font-weight: 700; font-size: 34px; color: var(--ink); }
-</style>
 </head>
 <body>
-<header><div class="wrap">
-  <a class="mark" href="/">Field<b>/</b>Supply</a>
-  <nav><a href="/products">Shop</a><a href="/products">New</a><a href="/posts">Journal</a><a class="cart" href="#">Cart <i>2</i></a></nav>
+<header class="border-b"><div class="wrap flex flex-wrap items-center justify-between md:h-header md:flex-nowrap">
+  <a class="mark" href="/">Field<b class="text-primary-300">/</b>Supply</a>
+  <div class="flex items-center gap-6.5 text-label tracking-label uppercase max-md:contents">
+    <nav class="nav-row" aria-label="Primary"><a href="/products">Shop</a><a href="/products">New</a><a href="/posts">Journal</a></nav>
+    <a class="cart" href="#">Cart <i>2</i></a>
+  </div>
 </div></header>
-<section class="hero">
-  <h1><span class="slide" style="--i:0">Made for</span><span class="slide" style="--i:1">the roof.</span></h1>
+<section class="hero relative overflow-hidden pt-10">
+  <h1 class="relative z-2 px-hero text-hero whitespace-nowrap text-white mix-blend-difference max-md:px-gutter-phone max-md:text-hero-phone max-md:whitespace-normal"><span class="slide" style="--i:0">Made for</span><span class="slide" style="--i:1">the roof.</span></h1>
   <div class="marquee" aria-hidden="true">
     <figure><img src="https://images.unsplash.com/photo-1578854955076-970394ef2512?w=900&q=75&auto=format&fit=crop" alt=""><figcaption>Coach jacket</figcaption></figure>
     <figure><img src="https://images.unsplash.com/photo-1588117260148-b47818741c74?w=900&q=75&auto=format&fit=crop" alt=""><figcaption>Loop sweatpant</figcaption></figure>
@@ -193,23 +34,23 @@ html.still .marquee { animation: none; }
     <figure><img src="https://images.unsplash.com/photo-1564557287817-3785e38ec1f5?w=900&q=75&auto=format&fit=crop" alt=""><figcaption>Sand hoodie</figcaption></figure>
     <figure><img src="https://images.unsplash.com/photo-1757495404191-e94ed7e70046?w=900&q=75&auto=format&fit=crop" alt=""><figcaption>Night hoodie</figcaption></figure>
   </div>
-  <div class="intro"><p>A small run of heavy cotton, made to be worn hard. Stock, sizes and checkout are Shopify's; the story is told here.</p><a class="button" href="/products">Shop the season</a></div>
+  <div class="flex items-end justify-between gap-10 px-hero pt-8.5 pb-14 max-md:flex-col max-md:items-start max-md:px-gutter-phone max-md:pt-6.5 max-md:pb-10"><p class="max-w-copy text-body leading-body text-secondary-400">A small run of heavy cotton, made to be worn hard. Stock, sizes and checkout are Shopify's; the story is told here.</p><a class="button" href="/products">Shop the season</a></div>
 </section>
 <main>
-  <section class="shop"><div class="wrap">
-    <div class="head"><h2 class="reveal">The season</h2><span>Prices in AUD · from Shopify</span></div>
-    <div class="grid">
-      <a class="item reveal" href="/products/night-hoodie"><div class="pic"><img style="view-transition-name: product-night" src="https://images.unsplash.com/photo-1757495404191-e94ed7e70046?w=900&q=75&auto=format&fit=crop" alt="Night hoodie, worn" loading="lazy"><img src="https://images.unsplash.com/photo-1564557287817-3785e38ec1f5?w=900&q=75&auto=format&fit=crop" alt="" loading="lazy"><span class="add">Add to cart</span></div><h3>Night hoodie</h3><div class="price"><span>3 colours</span><b>$120</b></div></a>
-      <a class="item reveal" href="/products/heavy-hoodie"><div class="pic"><img src="https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?w=900&q=75&auto=format&fit=crop" alt="Heavy hoodie, laid flat" loading="lazy"><img src="https://images.unsplash.com/photo-1578854955076-970394ef2512?w=900&q=75&auto=format&fit=crop" alt="" loading="lazy"><span class="add">Add to cart</span></div><h3>Heavy hoodie</h3><div class="price"><span>2 colours</span><b>$130</b></div></a>
-      <a class="item reveal" href="/products/ordinary-tee"><div class="pic"><img src="https://images.unsplash.com/photo-1636047250452-6772f6144b3d?w=900&q=75&auto=format&fit=crop" alt="Graphic tee, worn" loading="lazy"><img src="https://images.unsplash.com/photo-1588117260148-b47818741c74?w=900&q=75&auto=format&fit=crop" alt="" loading="lazy"><span class="add">Add to cart</span></div><h3>Ordinary tee</h3><div class="price"><span>Back print</span><b>$55</b></div></a>
-      <a class="item reveal" href="/products/loop-sweatpant"><div class="pic"><img src="https://images.unsplash.com/photo-1588117260148-b47818741c74?w=900&q=75&auto=format&fit=crop" alt="Loop sweatpant, worn on a rooftop" loading="lazy"><img src="https://images.unsplash.com/photo-1636047250452-6772f6144b3d?w=900&q=75&auto=format&fit=crop" alt="" loading="lazy"><span class="add">Add to cart</span></div><h3>Loop sweatpant</h3><div class="price"><span>Grey marl</span><b>$95</b></div></a>
+  <section class="border-t pt-14 pb-18"><div class="wrap">
+    <div class="mb-6.5 flex items-baseline justify-between"><h2 class="reveal font-display text-section font-extrabold max-md:text-heading">The season</h2><span class="text-label tracking-label text-secondary-400 uppercase">Prices in AUD · from Shopify</span></div>
+    <div class="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4.5">
+      <a class="card reveal" href="/products/night-hoodie"><div class="frame aspect-3/4"><img style="view-transition-name: product-night" src="https://images.unsplash.com/photo-1757495404191-e94ed7e70046?w=900&q=75&auto=format&fit=crop" alt="Night hoodie, worn" loading="lazy"><img src="https://images.unsplash.com/photo-1564557287817-3785e38ec1f5?w=900&q=75&auto=format&fit=crop" alt="" loading="lazy" class="card-alt"><span class="card-add">Add to cart</span></div><h3 class="mt-3 text-card">Night hoodie</h3><div class="mt-1 flex justify-between text-label text-secondary-400"><span>3 colours</span><b class="font-medium text-secondary-50">$120</b></div></a>
+      <a class="card reveal" href="/products/heavy-hoodie"><div class="frame aspect-3/4"><img src="https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?w=900&q=75&auto=format&fit=crop" alt="Heavy hoodie, laid flat" loading="lazy"><img src="https://images.unsplash.com/photo-1578854955076-970394ef2512?w=900&q=75&auto=format&fit=crop" alt="" loading="lazy" class="card-alt"><span class="card-add">Add to cart</span></div><h3 class="mt-3 text-card">Heavy hoodie</h3><div class="mt-1 flex justify-between text-label text-secondary-400"><span>2 colours</span><b class="font-medium text-secondary-50">$130</b></div></a>
+      <a class="card reveal" href="/products/ordinary-tee"><div class="frame aspect-3/4"><img src="https://images.unsplash.com/photo-1636047250452-6772f6144b3d?w=900&q=75&auto=format&fit=crop" alt="Graphic tee, worn" loading="lazy"><img src="https://images.unsplash.com/photo-1588117260148-b47818741c74?w=900&q=75&auto=format&fit=crop" alt="" loading="lazy" class="card-alt"><span class="card-add">Add to cart</span></div><h3 class="mt-3 text-card">Ordinary tee</h3><div class="mt-1 flex justify-between text-label text-secondary-400"><span>Back print</span><b class="font-medium text-secondary-50">$55</b></div></a>
+      <a class="card reveal" href="/products/loop-sweatpant"><div class="frame aspect-3/4"><img src="https://images.unsplash.com/photo-1588117260148-b47818741c74?w=900&q=75&auto=format&fit=crop" alt="Loop sweatpant, worn on a rooftop" loading="lazy"><img src="https://images.unsplash.com/photo-1636047250452-6772f6144b3d?w=900&q=75&auto=format&fit=crop" alt="" loading="lazy" class="card-alt"><span class="card-add">Add to cart</span></div><h3 class="mt-3 text-card">Loop sweatpant</h3><div class="mt-1 flex justify-between text-label text-secondary-400"><span>Grey marl</span><b class="font-medium text-secondary-50">$95</b></div></a>
     </div>
   </div></section>
-  <section class="trust"><div class="wrap"><div><b>Checkout on Shopify</b>Cards, wallets and receipts are Shopify's</div><div><b>Free returns</b>Thirty days, any reason</div><div><b>Made in small runs</b>When it's gone, it's gone</div></div></section>
+  <section class="border-y"><div class="mx-auto grid max-w-page py-6.5 text-label tracking-label text-secondary-400 uppercase max-md:py-4 md:grid-cols-3"><div class="py-6.5 max-md:py-4"><b class="mb-1 block font-sans text-feature tracking-normal text-secondary-50">Checkout on Shopify</b>Cards, wallets and receipts are Shopify's</div><div class="py-6.5 max-md:py-4"><b class="mb-1 block font-sans text-feature tracking-normal text-secondary-50">Free returns</b>Thirty days, any reason</div><div class="py-6.5 max-md:py-4"><b class="mb-1 block font-sans text-feature tracking-normal text-secondary-50">Made in small runs</b>When it's gone, it's gone</div></div></section>
 </main>
-<footer><div class="wrap">
-  <div class="made"><div class="pinies"><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,33 L-13,50" stroke="#7D73D9" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="52" rx="6.5" ry="3.8" fill="#26215C" stroke="#7D73D9" stroke-width="2"/><path d="M12,33 L13,50" stroke="#7D73D9" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="52" rx="6.5" ry="3.8" fill="#26215C" stroke="#7D73D9" stroke-width="2"/><path d="M-27.309516212355263,17 Q-39.30951621235526,22 -41.30951621235526,31" stroke="#7D73D9" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M27.309516212355263,17 Q35.15475810617763,20 33,27" stroke="#7D73D9" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M0,-41 A41,41 0 1 1 0,41 A41,41 0 1 1 0,-41 Z" fill="#AFA9EC" stroke="#7D73D9" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-11.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="-10.2" cy="-7.6" r="1.2" fill="#fff"/><ellipse cx="13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="14.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="15.8" cy="-7.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#26215C" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-roadmap"><g transform="translate(34,14) rotate(8)"><rect x="0" y="0" width="30" height="23" rx="3" fill="#F7F5EE" stroke="#5F5E5A" stroke-width="1.6"/><path d="M5,18 C10,18 9,9 15,10 C21,11 22,5 25,5" stroke="#534AB7" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="5" cy="18" r="2" fill="#534AB7"/><circle cx="25" cy="5" r="2.4" fill="#E2533F"/></g></g><circle cx="-41.30951621235526" cy="31" r="4.6" fill="#AFA9EC" stroke="#7D73D9" stroke-width="2"/><circle cx="33" cy="27" r="4.6" fill="#AFA9EC" stroke="#7D73D9" stroke-width="2"/></g></svg></span><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,33 L-13,50" stroke="#45B08D" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="52" rx="6.5" ry="3.8" fill="#04342C" stroke="#45B08D" stroke-width="2"/><path d="M12,33 L13,50" stroke="#45B08D" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="52" rx="6.5" ry="3.8" fill="#04342C" stroke="#45B08D" stroke-width="2"/><path d="M-29,17 Q-41,22 -43,31" stroke="#45B08D" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M29,17 Q42,21.5 45,30" stroke="#45B08D" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-39.0,-22.0 Q-39,-39 -22.0,-39.0 L22.0,-39.0 Q39,-39 39.0,-22.0 L39.0,22.0 Q39,39 22.0,39.0 L-22.0,39.0 Q-39,39 -39.0,22.0 Z" fill="#9FE1CB" stroke="#45B08D" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-11.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="-10.2" cy="-7.6" r="1.2" fill="#fff"/><ellipse cx="13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="14.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="15.8" cy="-7.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#04342C" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-stopwatch"><g transform="translate(46,16)"><rect x="-3" y="-15" width="6" height="5" rx="1" fill="#5F5E5A"/><circle cx="0" cy="0" r="12" fill="#F7F5EE" stroke="#5F5E5A" stroke-width="2"/><path d="M0,0 L0,-7 M0,0 L5,3" stroke="#0F6E56" stroke-width="2.2" stroke-linecap="round"/></g></g><circle cx="-43" cy="31" r="4.6" fill="#9FE1CB" stroke="#45B08D" stroke-width="2"/><circle cx="45" cy="30" r="4.6" fill="#9FE1CB" stroke="#45B08D" stroke-width="2"/></g></svg></span><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-18,34 Q-26,46 -32,51" stroke="#D5684A" stroke-width="4.6" fill="none" stroke-linecap="round"/><ellipse cx="-35" cy="53" rx="6.5" ry="3.8" fill="#4A1B0C" stroke="#D5684A" stroke-width="2"/><path d="M18,34 Q26,46 32,51" stroke="#D5684A" stroke-width="4.6" fill="none" stroke-linecap="round"/><ellipse cx="35" cy="53" rx="6.5" ry="3.8" fill="#4A1B0C" stroke="#D5684A" stroke-width="2"/><path d="M-31.125,27 Q-33.0625,37 -25,51" stroke="#D5684A" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M31.125,27 Q33.0625,37 25,51" stroke="#D5684A" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-6.1,-38.5 Q0,-50 6.1,-38.5 L40.9,26.5 Q47,38 34.0,38.0 L-34.0,38.0 Q-47,38 -40.9,26.5 Z" fill="#F0997B" stroke="#D5684A" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-18" cy="21" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="18" cy="21" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-11" cy="7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-9.5" cy="8" r="3.80" fill="#2C2C2A"/><circle cx="-8.2" cy="6.4" r="1.2" fill="#fff"/><ellipse cx="11" cy="7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="12.5" cy="8" r="3.80" fill="#2C2C2A"/><circle cx="13.8" cy="6.4" r="1.2" fill="#fff"/></g><g><path d="M-8.00,23 Q0,28.00 8.00,23" stroke="#4A1B0C" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-laptop"><g transform="translate(0,44)"><rect x="-23" y="-14" width="46" height="23" rx="3" fill="#444441"/><path d="M-6,-8 l-5,5 l5,5 M6,-8 l5,5 l-5,5" stroke="#F7B79F" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="-28" y="8" width="56" height="5" rx="2" fill="#888780"/></g></g><circle cx="-25" cy="51" r="4.6" fill="#F0997B" stroke="#D5684A" stroke-width="2"/><circle cx="25" cy="51" r="4.6" fill="#F0997B" stroke="#D5684A" stroke-width="2"/></g></svg></span><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,33 L-13,50" stroke="#D99A2B" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="52" rx="6.5" ry="3.8" fill="#412402" stroke="#D99A2B" stroke-width="2"/><path d="M12,33 L13,50" stroke="#D99A2B" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="52" rx="6.5" ry="3.8" fill="#412402" stroke="#D99A2B" stroke-width="2"/><path d="M-24.41025641025641,17 Q-36.41025641025641,22 -38.41025641025641,31" stroke="#D99A2B" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M24.41025641025641,17 Q44.705128205128204,19.5 55,26" stroke="#D99A2B" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-26.9,-30.3 Q-22,-39 -12.0,-39.0 L12.0,-39.0 Q22,-39 26.9,-30.3 L39.1,-8.7 Q44,0 39.1,8.7 L26.9,30.3 Q22,39 12.0,39.0 L-12.0,39.0 Q-22,39 -26.9,30.3 L-39.1,8.7 Q-44,0 -39.1,-8.7 Z" fill="#FAC775" stroke="#D99A2B" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-11.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="-10.2" cy="-7.6" r="1.2" fill="#fff"/><ellipse cx="13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="14.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="15.8" cy="-7.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#412402" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-glass"><g transform="translate(44,14)"><circle cx="0" cy="0" r="10" fill="#E6F1FB" fill-opacity=".85" stroke="#5F5E5A" stroke-width="3"/><path d="M7,7 L16,17" stroke="#5F5E5A" stroke-width="4.4" stroke-linecap="round"/></g></g><circle cx="-38.41025641025641" cy="31" r="4.6" fill="#FAC775" stroke="#D99A2B" stroke-width="2"/><circle cx="55" cy="26" r="4.6" fill="#FAC775" stroke="#D99A2B" stroke-width="2"/></g></svg></span><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,28 L-13,45" stroke="#378ADD" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="47" rx="6.5" ry="3.8" fill="#042C53" stroke="#378ADD" stroke-width="2"/><path d="M12,28 L13,45" stroke="#378ADD" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="47" rx="6.5" ry="3.8" fill="#042C53" stroke="#378ADD" stroke-width="2"/><path d="M-19,17 Q-31,22 -33,31" stroke="#378ADD" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M19,17 Q31,22 33,31" stroke="#378ADD" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-11.3,-36.7 Q0,-48 11.3,-36.7 L36.7,-11.3 Q48,0 36.7,11.3 L11.3,36.7 Q0,48 -11.3,36.7 L-36.7,11.3 Q-48,0 -36.7,-11.3 Z" fill="#B5D4F4" stroke="#378ADD" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-19" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="19" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-12" cy="-6" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-10.5" cy="-5" r="3.80" fill="#2C2C2A"/><circle cx="-9.2" cy="-6.6" r="1.2" fill="#fff"/><ellipse cx="12" cy="-6" rx="7.5" ry="7.50" fill="#fff"/><circle cx="13.5" cy="-5" r="3.80" fill="#2C2C2A"/><circle cx="14.8" cy="-6.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#042C53" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-bulb"><g transform="translate(40,-26)"><path d="M0,-13 C-8,-13 -12,-7 -12,-2 C-12,3 -8,6 -6,9 L6,9 C8,6 12,3 12,-2 C12,-7 8,-13 0,-13 Z" fill="#FAEEDA" stroke="#5F5E5A" stroke-width="1.8" stroke-linejoin="round"/><rect x="-5" y="10" width="10" height="5" rx="1.5" fill="#5F5E5A"/><path d="M-3,3 L0,-3 L3,3" stroke="#BA7517" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g></g><circle cx="-33" cy="31" r="4.6" fill="#B5D4F4" stroke="#378ADD" stroke-width="2"/><circle cx="33" cy="31" r="4.6" fill="#B5D4F4" stroke="#378ADD" stroke-width="2"/></g></svg></span></div><p>Made by the Pinies in <a href="#">Piny</a>, on EmDash and Shopify.<br>Products from Shopify; stories from EmDash.</p></div>
-  <div class="credits">Photos on Unsplash by <a href="https://unsplash.com/photos/man-wearing-orange-jacket-and-white-hat-sitting-on-pavement-QW9FrzPj70U">Mike Von</a>, <a href="https://unsplash.com/photos/men-wearing-a-grey-hoodie-jacket-leaning-in-a-wall-during-daytime-ZCoqcrWp9GY">The Ian</a>, <a href="https://unsplash.com/photos/young-woman-with-blonde-hair-wearing-a-dark-hoodie-xqhif3j_SAg">Dev Benjamin</a>, <a href="https://unsplash.com/photos/a-man-wearing-a-t-shirt-that-says-out-of-the-ordinary--7oth7kZEo8">Muhammad Reza Pahlevi</a>, <a href="https://unsplash.com/photos/white-hoodie-and-distressed-jeans-kJXGTOY1wLQ">Mediamodifier</a>.</div>
+<footer class="pt-10 pb-12"><div class="wrap grid grid-cols-footer items-end gap-10 max-md:grid-cols-1">
+  <div class="flex items-end gap-4.5 max-md:flex-col max-md:items-start"><div class="pinies flex"><span class="face size-face -mr-2 *:size-full"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,33 L-13,50" stroke="#7D73D9" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="52" rx="6.5" ry="3.8" fill="#26215C" stroke="#7D73D9" stroke-width="2"/><path d="M12,33 L13,50" stroke="#7D73D9" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="52" rx="6.5" ry="3.8" fill="#26215C" stroke="#7D73D9" stroke-width="2"/><path d="M-27.309516212355263,17 Q-39.30951621235526,22 -41.30951621235526,31" stroke="#7D73D9" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M27.309516212355263,17 Q35.15475810617763,20 33,27" stroke="#7D73D9" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M0,-41 A41,41 0 1 1 0,41 A41,41 0 1 1 0,-41 Z" fill="#AFA9EC" stroke="#7D73D9" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-11.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="-10.2" cy="-7.6" r="1.2" fill="#fff"/><ellipse cx="13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="14.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="15.8" cy="-7.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#26215C" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-roadmap"><g transform="translate(34,14) rotate(8)"><rect x="0" y="0" width="30" height="23" rx="3" fill="#F7F5EE" stroke="#5F5E5A" stroke-width="1.6"/><path d="M5,18 C10,18 9,9 15,10 C21,11 22,5 25,5" stroke="#534AB7" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="5" cy="18" r="2" fill="#534AB7"/><circle cx="25" cy="5" r="2.4" fill="#E2533F"/></g></g><circle cx="-41.30951621235526" cy="31" r="4.6" fill="#AFA9EC" stroke="#7D73D9" stroke-width="2"/><circle cx="33" cy="27" r="4.6" fill="#AFA9EC" stroke="#7D73D9" stroke-width="2"/></g></svg></span><span class="face size-face -mr-2 *:size-full"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,33 L-13,50" stroke="#45B08D" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="52" rx="6.5" ry="3.8" fill="#04342C" stroke="#45B08D" stroke-width="2"/><path d="M12,33 L13,50" stroke="#45B08D" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="52" rx="6.5" ry="3.8" fill="#04342C" stroke="#45B08D" stroke-width="2"/><path d="M-29,17 Q-41,22 -43,31" stroke="#45B08D" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M29,17 Q42,21.5 45,30" stroke="#45B08D" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-39.0,-22.0 Q-39,-39 -22.0,-39.0 L22.0,-39.0 Q39,-39 39.0,-22.0 L39.0,22.0 Q39,39 22.0,39.0 L-22.0,39.0 Q-39,39 -39.0,22.0 Z" fill="#9FE1CB" stroke="#45B08D" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-11.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="-10.2" cy="-7.6" r="1.2" fill="#fff"/><ellipse cx="13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="14.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="15.8" cy="-7.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#04342C" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-stopwatch"><g transform="translate(46,16)"><rect x="-3" y="-15" width="6" height="5" rx="1" fill="#5F5E5A"/><circle cx="0" cy="0" r="12" fill="#F7F5EE" stroke="#5F5E5A" stroke-width="2"/><path d="M0,0 L0,-7 M0,0 L5,3" stroke="#0F6E56" stroke-width="2.2" stroke-linecap="round"/></g></g><circle cx="-43" cy="31" r="4.6" fill="#9FE1CB" stroke="#45B08D" stroke-width="2"/><circle cx="45" cy="30" r="4.6" fill="#9FE1CB" stroke="#45B08D" stroke-width="2"/></g></svg></span><span class="face size-face -mr-2 *:size-full"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-18,34 Q-26,46 -32,51" stroke="#D5684A" stroke-width="4.6" fill="none" stroke-linecap="round"/><ellipse cx="-35" cy="53" rx="6.5" ry="3.8" fill="#4A1B0C" stroke="#D5684A" stroke-width="2"/><path d="M18,34 Q26,46 32,51" stroke="#D5684A" stroke-width="4.6" fill="none" stroke-linecap="round"/><ellipse cx="35" cy="53" rx="6.5" ry="3.8" fill="#4A1B0C" stroke="#D5684A" stroke-width="2"/><path d="M-31.125,27 Q-33.0625,37 -25,51" stroke="#D5684A" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M31.125,27 Q33.0625,37 25,51" stroke="#D5684A" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-6.1,-38.5 Q0,-50 6.1,-38.5 L40.9,26.5 Q47,38 34.0,38.0 L-34.0,38.0 Q-47,38 -40.9,26.5 Z" fill="#F0997B" stroke="#D5684A" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-18" cy="21" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="18" cy="21" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-11" cy="7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-9.5" cy="8" r="3.80" fill="#2C2C2A"/><circle cx="-8.2" cy="6.4" r="1.2" fill="#fff"/><ellipse cx="11" cy="7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="12.5" cy="8" r="3.80" fill="#2C2C2A"/><circle cx="13.8" cy="6.4" r="1.2" fill="#fff"/></g><g><path d="M-8.00,23 Q0,28.00 8.00,23" stroke="#4A1B0C" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-laptop"><g transform="translate(0,44)"><rect x="-23" y="-14" width="46" height="23" rx="3" fill="#444441"/><path d="M-6,-8 l-5,5 l5,5 M6,-8 l5,5 l-5,5" stroke="#F7B79F" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="-28" y="8" width="56" height="5" rx="2" fill="#888780"/></g></g><circle cx="-25" cy="51" r="4.6" fill="#F0997B" stroke="#D5684A" stroke-width="2"/><circle cx="25" cy="51" r="4.6" fill="#F0997B" stroke="#D5684A" stroke-width="2"/></g></svg></span><span class="face size-face -mr-2 *:size-full"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,33 L-13,50" stroke="#D99A2B" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="52" rx="6.5" ry="3.8" fill="#412402" stroke="#D99A2B" stroke-width="2"/><path d="M12,33 L13,50" stroke="#D99A2B" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="52" rx="6.5" ry="3.8" fill="#412402" stroke="#D99A2B" stroke-width="2"/><path d="M-24.41025641025641,17 Q-36.41025641025641,22 -38.41025641025641,31" stroke="#D99A2B" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M24.41025641025641,17 Q44.705128205128204,19.5 55,26" stroke="#D99A2B" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-26.9,-30.3 Q-22,-39 -12.0,-39.0 L12.0,-39.0 Q22,-39 26.9,-30.3 L39.1,-8.7 Q44,0 39.1,8.7 L26.9,30.3 Q22,39 12.0,39.0 L-12.0,39.0 Q-22,39 -26.9,30.3 L-39.1,8.7 Q-44,0 -39.1,-8.7 Z" fill="#FAC775" stroke="#D99A2B" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-11.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="-10.2" cy="-7.6" r="1.2" fill="#fff"/><ellipse cx="13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="14.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="15.8" cy="-7.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#412402" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-glass"><g transform="translate(44,14)"><circle cx="0" cy="0" r="10" fill="#E6F1FB" fill-opacity=".85" stroke="#5F5E5A" stroke-width="3"/><path d="M7,7 L16,17" stroke="#5F5E5A" stroke-width="4.4" stroke-linecap="round"/></g></g><circle cx="-38.41025641025641" cy="31" r="4.6" fill="#FAC775" stroke="#D99A2B" stroke-width="2"/><circle cx="55" cy="26" r="4.6" fill="#FAC775" stroke="#D99A2B" stroke-width="2"/></g></svg></span><span class="face size-face -mr-2 *:size-full"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,28 L-13,45" stroke="#378ADD" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="47" rx="6.5" ry="3.8" fill="#042C53" stroke="#378ADD" stroke-width="2"/><path d="M12,28 L13,45" stroke="#378ADD" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="47" rx="6.5" ry="3.8" fill="#042C53" stroke="#378ADD" stroke-width="2"/><path d="M-19,17 Q-31,22 -33,31" stroke="#378ADD" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M19,17 Q31,22 33,31" stroke="#378ADD" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-11.3,-36.7 Q0,-48 11.3,-36.7 L36.7,-11.3 Q48,0 36.7,11.3 L11.3,36.7 Q0,48 -11.3,36.7 L-36.7,11.3 Q-48,0 -36.7,-11.3 Z" fill="#B5D4F4" stroke="#378ADD" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-19" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="19" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-12" cy="-6" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-10.5" cy="-5" r="3.80" fill="#2C2C2A"/><circle cx="-9.2" cy="-6.6" r="1.2" fill="#fff"/><ellipse cx="12" cy="-6" rx="7.5" ry="7.50" fill="#fff"/><circle cx="13.5" cy="-5" r="3.80" fill="#2C2C2A"/><circle cx="14.8" cy="-6.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#042C53" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-bulb"><g transform="translate(40,-26)"><path d="M0,-13 C-8,-13 -12,-7 -12,-2 C-12,3 -8,6 -6,9 L6,9 C8,6 12,3 12,-2 C12,-7 8,-13 0,-13 Z" fill="#FAEEDA" stroke="#5F5E5A" stroke-width="1.8" stroke-linejoin="round"/><rect x="-5" y="10" width="10" height="5" rx="1.5" fill="#5F5E5A"/><path d="M-3,3 L0,-3 L3,3" stroke="#BA7517" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g></g><circle cx="-33" cy="31" r="4.6" fill="#B5D4F4" stroke="#378ADD" stroke-width="2"/><circle cx="33" cy="31" r="4.6" fill="#B5D4F4" stroke="#378ADD" stroke-width="2"/></g></svg></span></div><p class="text-label leading-body text-secondary-400">Made by the Pinies in <a class="text-secondary-50 underline" href="https://piny.studio/home/"><img class="me-1.5 inline-block size-4.5 align-middle" src="/brand/piny-studio-mark.png" width="18" height="18" alt=""><span class="font-medium">Piny Studio</span></a>, on EmDash and Shopify.<br>Products from Shopify; stories from EmDash.</p></div>
+  <div class="text-fine leading-fine text-secondary-400 *:underline *:decoration-neutral-500 dark:*:decoration-neutral-600">Photos on Unsplash by <a href="https://unsplash.com/photos/man-wearing-orange-jacket-and-white-hat-sitting-on-pavement-QW9FrzPj70U">Mike Von</a>, <a href="https://unsplash.com/photos/men-wearing-a-grey-hoodie-jacket-leaning-in-a-wall-during-daytime-ZCoqcrWp9GY">The Ian</a>, <a href="https://unsplash.com/photos/young-woman-with-blonde-hair-wearing-a-dark-hoodie-xqhif3j_SAg">Dev Benjamin</a>, <a href="https://unsplash.com/photos/a-man-wearing-a-t-shirt-that-says-out-of-the-ordinary--7oth7kZEo8">Muhammad Reza Pahlevi</a>, <a href="https://unsplash.com/photos/white-hoodie-and-distressed-jeans-kJXGTOY1wLQ">Mediamodifier</a>.</div>
 </div></footer>
 <script is:inline>
 // The Pinies' entrance: when a row of them comes into view, they play the next of the public site's four, in order,

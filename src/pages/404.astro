@@ -3,7 +3,9 @@ import Base from "../layouts/Base.astro";
 ---
 
 <Base title="Not Found">
-	<h1>Page not found</h1>
-	<p>The page you're looking for doesn't exist.</p>
-	<a href="/">Go home</a>
+	<section class="grid justify-items-start gap-6.5 py-10">
+		<h1 class="text-shout">Page<b class="block text-primary-300">not found.</b></h1>
+		<p class="max-w-copy text-body leading-body text-secondary-400">The page you're looking for doesn't exist.</p>
+		<a class="button" href="/">Go home</a>
+	</section>
 </Base>

@@ -11,9 +11,13 @@ A dark, wide-type EmDash shop for a small clothing label, its products, cart and
 
 It needs Node 22 or later and pnpm. On Cloudflare it uses a D1 database (`DB`) and an R2 bucket (`MEDIA`), as EmDash's Cloudflare templates do.
 
+## Change its look
+
+The pages are drawn with Tailwind CSS 4. Every colour, face, type size, radius and layout size is a token in [`src/styles/theme.css`](src/styles/theme.css): edit that file to change the look. [`src/styles/global.css`](src/styles/global.css) holds the rest: the motion, which stops under reduced motion, a few shared parts, and the styles of what EmDash renders.
+
 ## Photos and video
 
-They are linked from their sources and never copied into this repository:
+They are linked from their sources and never copied into this repository. The same six photos are the seed's product and story pictures, so they also appear on the shop, journal and product pages; every page credits them in its footer.
 
 - Home: the hero marquee: [Mike Von](https://unsplash.com/@thevoncomplex) on Unsplash, [Unsplash License](https://unsplash.com/license), linked from [its page](https://unsplash.com/photos/man-wearing-orange-jacket-and-white-hat-sitting-on-pavement-QW9FrzPj70U), not copied.
 - Home: the hero marquee: [Mike Von](https://unsplash.com/@thevoncomplex) on Unsplash, [Unsplash License](https://unsplash.com/license), linked from [its page](https://unsplash.com/photos/woman-in-gray-t-shirt-and-gray-pants-sitting-on-gray-concrete-bench-during-daytime-YsiSAp3ccvk), not copied.
@@ -24,4 +28,4 @@ They are linked from their sources and never copied into this repository:
 
 ## Licence
 
-MIT. Built on EmDash's `starter-cloudflare` template, MIT, Copyright 2026 Cloudflare Inc.; its notice is kept in [LICENSE](LICENSE). Made by the Pinies in [Piny](https://piny.studio/home/).
+MIT. Built on EmDash's `starter-cloudflare` template, MIT, Copyright 2026 Cloudflare Inc.; its notice is kept in [LICENSE](LICENSE). Made by the Pinies in [Piny](https://piny.studio/home/). The Piny Studio mark in `public/brand` is Piny's and is not covered by this template's MIT licence.

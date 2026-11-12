@@ -43,42 +43,55 @@ const paragraphs = String(product.data.description ?? "").split(/\n{2,}/).filter
 	image={seo.ogImage}
 	content={{ collection: "products", id: product.data.id, slug }}
 >
-	<article>
-		{
-			product.data.image && (
-				<div {...product.edit.image}>
-					<Image image={product.data.image} />
-				</div>
-			)
-		}
-
-		<h1 {...product.edit.title}>{product.data.title}</h1>
-		{product.data.price && <p {...product.edit.price}><strong>{product.data.price}</strong></p>}
-		{product.data.note && <p {...product.edit.note}>{product.data.note}</p>}
-
-		{
-			collections.length > 0 && (
-				<div>
-					{collections.map((c) => (
-						<span>{c.label}</span>
-					))}
-				</div>
-			)
-		}
-
-		<div {...product.edit.description}>
-			{paragraphs.map((text) => <p>{text}</p>)}
+	<article class="grid items-start gap-7 md:grid-cols-product md:gap-12">
+		<div class="grid gap-3.5">
+			{
+				product.data.image && (
+					<div class="frame aspect-4/5" style={`view-transition-name: product-${slug}`} {...product.edit.image}>
+						<Image image={product.data.image} priority />
+					</div>
+				)
+			}
+			{
+				product.data.hover_image && (
+					<div class="frame aspect-4/5" {...product.edit.hover_image}>
+						<Image image={product.data.hover_image} />
+					</div>
+				)
+			}
 		</div>
 
-		{
-			product.data.hover_image && (
-				<div {...product.edit.hover_image}>
-					<Image image={product.data.hover_image} />
-				</div>
-			)
-		}
+		<div class="grid gap-4.5 md:sticky md:top-7">
+			{
+				collections.length > 0 && (
+					<div class="chips">
+						{collections.map((c) => (
+							<span class="chip">{c.label}</span>
+						))}
+					</div>
+				)
+			}
 
-		<p>Sizes, stock and checkout are on our Shopify store{product.data.shopify_handle && <> (product <code>{product.data.shopify_handle}</code>)</>}.</p>
-		<p><a href="/products">← All products</a></p>
+			<h1 class="text-display-product" {...product.edit.title}>{product.data.title}</h1>
+
+			{
+				(product.data.price || product.data.note) && (
+					<div class="flex items-baseline gap-4 border-b pb-4.5">
+						{product.data.price && <strong class="font-sans text-price font-bold" {...product.edit.price}>{product.data.price}</strong>}
+						{product.data.note && <span class="text-label tracking-label text-secondary-400 uppercase" {...product.edit.note}>{product.data.note}</span>}
+					</div>
+				)
+			}
+
+			<div class="grid gap-3.5 text-body leading-copy text-secondary-400" {...product.edit.description}>
+				{paragraphs.map((text) => <p>{text}</p>)}
+			</div>
+
+			<p class="border border-l-3 border-l-primary-300 bg-neutral-700 px-5 py-4.5 text-label leading-copy text-secondary-400 dark:bg-neutral-900">
+				<b class="mb-1 block font-sans text-feature text-secondary-50 uppercase">Checkout on Shopify</b>
+				Sizes, stock and checkout are on our Shopify store{product.data.shopify_handle && <> (product <code class="text-primary-300">{product.data.shopify_handle}</code>)</>}.
+			</p>
+			<p><a class="text-label tracking-label text-secondary-400 uppercase transition-colors duration-200 hover:text-primary-300" href="/products">← All products</a></p>
+		</div>
 	</article>
 </Base>

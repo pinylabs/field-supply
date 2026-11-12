@@ -44,53 +44,59 @@ const categories = post.data.terms?.category ?? [];
 	image={seo.ogImage}
 	content={{ collection: "posts", id: post.data.id, slug }}
 >
-	<article>
-		{
-			post.data.featured_image && (
-				<div {...post.edit.featured_image}>
-					<Image image={post.data.featured_image} />
-				</div>
-			)
-		}
+	<div class="grid items-start gap-12 lg:grid-cols-article lg:gap-16">
+		<article class="grid gap-5.5">
+			{
+				categories.length > 0 && (
+					<div class="chips">
+						{categories.map((c) => (
+							<a class="chip chip-solid" href={`/category/${c.slug}`}>{c.label}</a>
+						))}
+					</div>
+				)
+			}
 
-		<h1 {...post.edit.title}>{post.data.title}</h1>
+			<h1 class="text-display-story" {...post.edit.title}>{post.data.title}</h1>
 
-		{
-			post.data.publishedAt && (
-				<time datetime={post.data.publishedAt.toISOString()}>
-					{post.data.publishedAt.toLocaleDateString("en-US", {
-						year: "numeric",
-						month: "long",
-						day: "numeric",
-					})}
-				</time>
-			)
-		}
+			{
+				post.data.publishedAt && (
+					<div class="flex flex-wrap items-center gap-3.5 border-b pb-5">
+						<time class="text-label tracking-label text-secondary-400 uppercase" datetime={post.data.publishedAt.toISOString()}>
+							{post.data.publishedAt.toLocaleDateString("en-US", {
+								year: "numeric",
+								month: "long",
+								day: "numeric",
+							})}
+						</time>
+					</div>
+				)
+			}
 
-		{
-			categories.length > 0 && (
-				<div>
-					{categories.map((c) => (
-						<a href={`/category/${c.slug}`}>{c.label}</a>
-					))}
-				</div>
-			)
-		}
+			{
+				post.data.featured_image && (
+					<div class="frame aspect-video" {...post.edit.featured_image}>
+						<Image image={post.data.featured_image} priority />
+					</div>
+				)
+			}
 
-		<PortableText value={post.data.content} />
+			<div class="prose">
+				<PortableText value={post.data.content} />
+			</div>
 
-		{
-			tags.length > 0 && (
-				<div>
-					{tags.map((t) => (
-						<a href={`/tag/${t.slug}`}>{t.label}</a>
-					))}
-				</div>
-			)
-		}
-	</article>
+			{
+				tags.length > 0 && (
+					<div class="chips border-t pt-5">
+						{tags.map((t) => (
+							<a class="chip" href={`/tag/${t.slug}`}>{t.label}</a>
+						))}
+					</div>
+				)
+			}
+		</article>
 
-	<aside>
-		<WidgetArea name="sidebar" />
-	</aside>
+		<aside class="grid gap-8.5 lg:sticky lg:top-7">
+			<WidgetArea name="sidebar" class="grid gap-8.5" />
+		</aside>
+	</div>
 </Base>

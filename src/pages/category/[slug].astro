@@ -35,32 +35,36 @@ if (Astro.cache?.enabled) {
 ---
 
 <Base title={`${term.label} posts`} description={`Posts in ${term.label}`}>
-	<h1>{term.label}</h1>
+	<div class="page-head">
+		<h1>{term.label}</h1>
+		<p>Category</p>
+	</div>
 
 	{
 		posts.length === 0 ? (
-			<p>No posts in this category yet.</p>
+			<p class="py-10 text-body leading-body text-secondary-400">No posts in this category yet.</p>
 		) : (
-			<ul>
+			<ul class="grid grid-cols-1 gap-x-4.5 gap-y-8.5 md:grid-cols-2 lg:grid-cols-3">
 				{posts.map((post) => (
-					<li>
+					<li class="story reveal grid content-start gap-3">
 						<a href={`/posts/${post.id}`}>
 							{post.data.featured_image && (
-								<div {...post.edit.featured_image}><Image image={post.data.featured_image} /></div>
+								<div class="frame aspect-4/3" {...post.edit.featured_image}><Image image={post.data.featured_image} /></div>
 							)}
-							<h2 {...post.edit.title}>{post.data.title}</h2>
+							<h2 class="mt-1 text-title leading-heading" {...post.edit.title}>{post.data.title}</h2>
 						</a>
-						{post.data.excerpt && <p {...post.edit.excerpt}>{post.data.excerpt}</p>}
+						{post.data.excerpt && <p class="text-small leading-body text-secondary-400" {...post.edit.excerpt}>{post.data.excerpt}</p>}
 					</li>
 				))}
 			</ul>
 		)
 	}
-	<nav aria-label="Pagination">
+	<nav class="pagination" aria-label="Pagination">
 		{cursor && <a href={`/category/${term.slug}`}>First page</a>}
 		{
 			nextCursor && (
 				<a
+					class="next"
 					href={`/category/${term.slug}?cursor=${encodeURIComponent(nextCursor)}`}
 				>
 					Next page

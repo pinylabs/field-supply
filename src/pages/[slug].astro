@@ -33,9 +33,11 @@ const seo = getSeoMeta(page, {
 	canonical={seo.canonical}
 	content={{ collection: "pages", id: page.data.id, slug }}
 >
-	<article>
-		<h1 {...page.edit.title}>{page.data.title}</h1>
+	<article class="grid max-w-article gap-5.5">
+		<h1 class="text-display-story" {...page.edit.title}>{page.data.title}</h1>
 
-		<PortableText value={page.data.content} />
+		<div class="prose">
+			<PortableText value={page.data.content} />
+		</div>
 	</article>
 </Base>

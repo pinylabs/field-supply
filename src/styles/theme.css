@@ -1,0 +1,164 @@
+/* Field Supply's design tokens: the one file that sets the look. Every colour, face, type size, line height,
+   tracking, radius, size and layout track the pages use is here; the markup names them through Tailwind's
+   utilities (bg-primary-300, text-display, rounded-card, max-w-page, grid-cols-product), so changing the
+   look means editing this file. `static` writes every token out as a CSS variable, used or not, so a design
+   tool can read and edit them all. Dark-led in both schemes: a night street, one acid accent, wide type. */
+@theme static {
+  /* Primary: the acid accent. 300 is the accent itself, 950 the near-black ink set on it. */
+  --color-primary-50: #fbfff0;
+  --color-primary-100: #f4ffd6;
+  --color-primary-200: #e8ffa3;
+  --color-primary-300: #d4ff3a;
+  --color-primary-400: #bdeb1c;
+  --color-primary-500: #a0cc06;
+  --color-primary-600: #7ca100;
+  --color-primary-700: #5d7a00;
+  --color-primary-800: #3f5300;
+  --color-primary-900: #252f00;
+  --color-primary-950: #101400;
+  --color-primary: var(--color-primary-300);
+
+  /* Secondary: the warm bone of the type. 50 is the ink, 400 the soft grey of notes and labels. */
+  --color-secondary-50: #f2f0ea;
+  --color-secondary-100: #e2dfd7;
+  --color-secondary-200: #cbc8bf;
+  --color-secondary-300: #b3b0a7;
+  --color-secondary-400: #9a978f;
+  --color-secondary-500: #7c7972;
+  --color-secondary-600: #5f5d57;
+  --color-secondary-700: #45433f;
+  --color-secondary-800: #2d2c29;
+  --color-secondary-900: #1b1a18;
+  --color-secondary-950: #0f0e0d;
+  --color-secondary: var(--color-secondary-50);
+
+  /* Tertiary: the Pinies' violet from the footer (300 their fill, 500 their outline), free for a site's own accents. */
+  --color-tertiary-50: #f3f2fc;
+  --color-tertiary-100: #e6e3f8;
+  --color-tertiary-200: #cdc8f2;
+  --color-tertiary-300: #afa9ec;
+  --color-tertiary-400: #968de3;
+  --color-tertiary-500: #7d73d9;
+  --color-tertiary-600: #6358c4;
+  --color-tertiary-700: #534ab7;
+  --color-tertiary-800: #3c3589;
+  --color-tertiary-900: #26215c;
+  --color-tertiary-950: #17143a;
+  --color-tertiary: var(--color-tertiary-500);
+
+  /* Neutral: the night surfaces. Light scheme: lines 500, cards 700, ground 800.
+     Dark scheme (the `dark:` variant): lines 600, cards 900, ground 950. */
+  --color-neutral-50: #f5f5f7;
+  --color-neutral-100: #e4e4e8;
+  --color-neutral-200: #c8c8cf;
+  --color-neutral-300: #9d9da6;
+  --color-neutral-400: #64646d;
+  --color-neutral-500: #2e2e34;
+  --color-neutral-600: #24242a;
+  --color-neutral-700: #1d1d21;
+  --color-neutral-800: #161618;
+  --color-neutral-900: #141417;
+  --color-neutral-950: #0b0b0c;
+  --color-neutral: var(--color-neutral-950);
+
+  /* A form field's placeholder, as the browser drew it before Tailwind's reset. */
+  --color-placeholder: darkgray;
+
+  /* Faces. Archivo is the wide face: `font-display` at its widest for the mark and headlines, `font-sans` a
+     step narrower for names and small headings. IBM Plex Mono is the body. Keep the Google Fonts link in step. */
+  --font-sans: 'Archivo', system-ui, sans-serif;
+  --font-sans--font-variation-settings: "wdth" 112;
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-display--font-variation-settings: "wdth" 125;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --default-font-family: var(--font-mono);
+  --default-font-variation-settings: normal;
+
+  /* Line heights and tracking. `normal` is the face's own line height, the one the pages use by default. */
+  --leading-normal: normal;
+  --leading-poster: .82;
+  --leading-display: .9;
+  --leading-heading: 1.05;
+  --leading-quote: 1.3;
+  --leading-compact: 1.4;
+  --leading-body: 1.6;
+  --leading-copy: 1.7;
+  --leading-prose: 1.75;
+  --leading-fine: 1.8;
+  --tracking-poster: -.02em;
+  --tracking-heading: -.01em;
+  --tracking-mark: .02em;
+  --tracking-button: .06em;
+  --tracking-label: .08em;
+
+  /* Type sizes. Tailwind's own sizes are cleared: each carries a line height these pages do not use. */
+  --text-*: initial;
+  --text-fine: 11px;
+  --text-caption: 12px;
+  --text-label: 13px;
+  --text-small: 14px;
+  --text-body: 15px;
+  --text-prose: 16px;
+  --text-card: 17px;
+  --text-feature: 18px;
+  --text-title: 22px;
+  --text-price: 28px;
+  --text-heading: 30px;
+  --text-section: 44px;
+  --text-section--letter-spacing: var(--tracking-heading);
+  --text-display: clamp(34px, 6vw, 72px);
+  --text-display--line-height: var(--leading-display);
+  --text-display--letter-spacing: var(--tracking-heading);
+  --text-display-story: clamp(36px, 5.4vw, 72px);
+  --text-display-story--line-height: var(--leading-display);
+  --text-display-story--letter-spacing: var(--tracking-heading);
+  --text-display-product: clamp(36px, 4.6vw, 64px);
+  --text-display-product--line-height: var(--leading-display);
+  --text-display-product--letter-spacing: var(--tracking-heading);
+  --text-hero: 150px;
+  --text-hero--line-height: var(--leading-poster);
+  --text-hero--letter-spacing: var(--tracking-poster);
+  --text-hero-phone: 62px;
+  --text-hero-phone--line-height: var(--leading-poster);
+  --text-hero-phone--letter-spacing: var(--tracking-poster);
+  --text-shout: clamp(64px, 14vw, 180px);
+  --text-shout--line-height: var(--leading-poster);
+  --text-shout--letter-spacing: var(--tracking-poster);
+
+  /* Radii. */
+  --radius-card: 4px;
+  --radius-pill: 999px;
+
+  /* Spacing: Tailwind's step (p-4 is 16px), and the named sizes of the layout. */
+  --spacing: .25rem;
+  --spacing-gutter: 40px;
+  --spacing-gutter-phone: 18px;
+  --spacing-hero: max(var(--spacing-gutter), calc((100vw - var(--container-page)) / 2 + var(--spacing-gutter)));
+  --spacing-header: 70px;
+  --spacing-badge: 22px;
+  --spacing-face: 54px;
+  --spacing-marquee: 300px;
+  --spacing-marquee-phone: 190px;
+  --spacing-search: 180px;
+  --spacing-results: 300px;
+
+  /* Measures and the page's width. */
+  --container-page: 1320px;
+  --container-article: 760px;
+  --container-head: 520px;
+  --container-copy: 460px;
+  --container-measure: 68ch;
+
+  /* Layout tracks. */
+  /* The footer: the Pinies and their sentence, then the photo credits. The first track is wide enough for the
+     sentence with Piny Studio's mark to stay on one line on a desktop. */
+  --grid-template-columns-footer: 1.6fr 1fr;
+  --grid-template-columns-product: 1.25fr 1fr;
+  --grid-template-columns-article: minmax(0, 1fr) 280px;
+
+  /* Easing for the motion. */
+  --ease-in: cubic-bezier(.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, .2, 1);
+  --ease-snap: cubic-bezier(.2, .8, .2, 1);
+  --ease-entrance: cubic-bezier(.3, .7, .3, 1);
+}
