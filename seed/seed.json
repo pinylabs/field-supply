@@ -2,21 +2,28 @@
 	"$schema": "https://emdashcms.com/seed.schema.json",
 	"version": "1",
 	"meta": {
-		"name": "Starter",
-		"description": "A minimal EmDash starter with posts and pages",
-		"author": "EmDash"
+		"name": "Field Supply",
+		"description": "A dark, wide-type shop for a small clothing label: its stories and lookbook in EmDash, its products, cart and checkout on Shopify.",
+		"author": "Piny"
 	},
 	"settings": {
-		"title": "My Site",
-		"tagline": "Built with EmDash"
+		"title": "Field Supply",
+		"tagline": "Clothes for the roof and the street"
 	},
 	"collections": [
 		{
 			"slug": "posts",
-			"label": "Posts",
-			"labelSingular": "Post",
+			"label": "Journal",
+			"labelSingular": "Story",
 			"urlPattern": "/posts/{slug}",
-			"supports": ["drafts", "revisions", "preview", "scheduling", "search", "seo"],
+			"supports": [
+				"drafts",
+				"revisions",
+				"preview",
+				"scheduling",
+				"search",
+				"seo"
+			],
 			"fields": [
 				{
 					"slug": "title",
@@ -48,7 +55,13 @@
 			"label": "Pages",
 			"labelSingular": "Page",
 			"urlPattern": "/{slug}",
-			"supports": ["drafts", "revisions", "preview", "search", "seo"],
+			"supports": [
+				"drafts",
+				"revisions",
+				"preview",
+				"search",
+				"seo"
+			],
 			"fields": [
 				{
 					"slug": "title",
@@ -64,6 +77,60 @@
 					"searchable": true
 				}
 			]
+		},
+		{
+			"slug": "products",
+			"label": "Products",
+			"labelSingular": "Product",
+			"description": "The season's pieces as the site shows them. Stock, sizes, cart and checkout stay on Shopify; the Shopify handle links each piece to its product there.",
+			"urlPattern": "/products/{slug}",
+			"supports": [
+				"drafts",
+				"revisions",
+				"preview",
+				"search",
+				"seo"
+			],
+			"fields": [
+				{
+					"slug": "title",
+					"label": "Title",
+					"type": "string",
+					"required": true,
+					"searchable": true
+				},
+				{
+					"slug": "price",
+					"label": "Price as shown",
+					"type": "string"
+				},
+				{
+					"slug": "note",
+					"label": "Short note",
+					"type": "string"
+				},
+				{
+					"slug": "description",
+					"label": "Description",
+					"type": "text",
+					"searchable": true
+				},
+				{
+					"slug": "image",
+					"label": "Image",
+					"type": "image"
+				},
+				{
+					"slug": "hover_image",
+					"label": "Second image",
+					"type": "image"
+				},
+				{
+					"slug": "shopify_handle",
+					"label": "Shopify handle",
+					"type": "string"
+				}
+			]
 		}
 	],
 	"taxonomies": [
@@ -72,15 +139,17 @@
 			"label": "Categories",
 			"labelSingular": "Category",
 			"hierarchical": true,
-			"collections": ["posts"],
+			"collections": [
+				"posts"
+			],
 			"terms": [
 				{
-					"slug": "general",
-					"label": "General"
+					"slug": "lookbook",
+					"label": "Lookbook"
 				},
 				{
-					"slug": "updates",
-					"label": "Updates"
+					"slug": "making",
+					"label": "Making"
 				}
 			]
 		},
@@ -89,15 +158,52 @@
 			"label": "Tags",
 			"labelSingular": "Tag",
 			"hierarchical": false,
-			"collections": ["posts"],
+			"collections": [
+				"posts"
+			],
 			"terms": [
 				{
-					"slug": "starter",
-					"label": "Starter"
+					"slug": "the-season",
+					"label": "The season"
 				},
 				{
-					"slug": "example",
-					"label": "Example"
+					"slug": "hoodies",
+					"label": "Hoodies"
+				},
+				{
+					"slug": "heavy-cotton",
+					"label": "Heavy cotton"
+				},
+				{
+					"slug": "small-runs",
+					"label": "Small runs"
+				}
+			]
+		},
+		{
+			"name": "product_collection",
+			"label": "Collections",
+			"labelSingular": "Collection",
+			"hierarchical": true,
+			"collections": [
+				"products"
+			],
+			"terms": [
+				{
+					"slug": "outerwear",
+					"label": "Outerwear"
+				},
+				{
+					"slug": "hoodies",
+					"label": "Hoodies"
+				},
+				{
+					"slug": "tees",
+					"label": "Tees"
+				},
+				{
+					"slug": "bottoms",
+					"label": "Bottoms"
 				}
 			]
 		}
@@ -109,18 +215,23 @@
 			"items": [
 				{
 					"type": "custom",
-					"label": "Home",
-					"url": "/"
+					"label": "Shop",
+					"url": "/products"
 				},
 				{
 					"type": "custom",
-					"label": "Posts",
+					"label": "Journal",
 					"url": "/posts"
 				},
 				{
 					"type": "custom",
 					"label": "About",
 					"url": "/about"
+				},
+				{
+					"type": "custom",
+					"label": "Shipping & returns",
+					"url": "/shipping-returns"
 				}
 			]
 		}
@@ -144,12 +255,19 @@
 				{
 					"type": "component",
 					"componentId": "core:recent-posts",
-					"title": "Recent Posts",
+					"title": "From the journal",
 					"props": {
 						"count": 5
 					}
 				}
 			]
+		}
+	],
+	"bylines": [
+		{
+			"id": "byline-studio",
+			"slug": "field-supply",
+			"displayName": "Field Supply"
 		}
 	],
 	"content": {
@@ -163,15 +281,133 @@
 					"content": [
 						{
 							"_type": "block",
+							"_key": "k0",
 							"style": "normal",
 							"children": [
 								{
 									"_type": "span",
-									"text": "This is the about page. Edit it in the admin panel or replace this template with your own design.",
-									"_key": "k1"
+									"_key": "k1",
+									"text": "Field Supply makes clothes for the roof and the street: a small run of heavy cotton, made to be worn hard."
 								}
-							],
-							"_key": "k0"
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k2",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k3",
+									"text": "Each season is a handful of pieces — a coach jacket, hoodies, a tee and a sweatpant — made in small runs. When a piece is gone, it's gone."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k4",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k5",
+									"text": "Where things live"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k6",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k7",
+									"text": "Stock, sizes and checkout are Shopify's; the story is told here. The journal holds the lookbook and notes on how the clothes are made."
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"id": "shipping-returns",
+				"slug": "shipping-returns",
+				"status": "published",
+				"data": {
+					"title": "Shipping & returns",
+					"content": [
+						{
+							"_type": "block",
+							"_key": "k8",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k9",
+									"text": "Checkout on Shopify"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "ka",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "kb",
+									"text": "Cards, wallets and receipts are Shopify's. Prices are in AUD, and shipping costs and times are shown at checkout before you pay."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "kc",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "kd",
+									"text": "Free returns"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "ke",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "kf",
+									"text": "Thirty days, any reason. Send a piece back unworn, with its tags, and you get your money back to the way you paid."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "kg",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "kh",
+									"text": "Small runs"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "ki",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "kj",
+									"text": "We make each piece in a small run. If your size has gone, it may not come back, so we can exchange it only while stock lasts."
+								}
+							]
 						}
 					]
 				}
@@ -179,54 +415,448 @@
 		],
 		"posts": [
 			{
-				"id": "post-1",
-				"slug": "welcome",
+				"id": "post-made-for-the-roof",
+				"slug": "made-for-the-roof",
 				"status": "published",
 				"data": {
-					"title": "Welcome",
-					"excerpt": "Your first post. Replace this with your own content.",
+					"title": "Made for the roof",
+					"excerpt": "The season in five pieces: a coach jacket, three hoodies and a loop sweatpant, worn on the roof and the street.",
+					"featured_image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1578854955076-970394ef2512?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "A man in an orange coach jacket and a white cap sitting on the pavement",
+							"filename": "made-for-the-roof.jpg"
+						}
+					},
 					"content": [
 						{
 							"_type": "block",
+							"_key": "kk",
 							"style": "normal",
 							"children": [
 								{
 									"_type": "span",
-									"text": "This is a starter post. The templates in this project show the basic patterns for querying and rendering EmDash content. Replace them with your own design.",
-									"_key": "k1"
+									"_key": "kl",
+									"text": "This season is five pieces, shot on the roof and the street where they are meant to be worn."
 								}
-							],
-							"_key": "k0"
+							]
 						},
 						{
 							"_type": "block",
+							"_key": "km",
 							"style": "h2",
 							"children": [
 								{
 									"_type": "span",
-									"text": "What to do next",
-									"_key": "k3"
+									"_key": "kn",
+									"text": "The pieces"
 								}
-							],
-							"_key": "k2"
+							]
 						},
 						{
 							"_type": "block",
+							"_key": "ko",
 							"style": "normal",
 							"children": [
 								{
 									"_type": "span",
-									"text": "Open the admin panel to add content, or edit the Astro pages in src/pages to change how content is displayed.",
-									"_key": "k5"
+									"_key": "kp",
+									"text": "The Coach jacket, the Night, Heavy and Sand hoodies, the Ordinary tee and the Loop sweatpant. Each is heavy cotton, cut loose, and made in a small run."
 								}
-							],
-							"_key": "k4"
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "kq",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "kr",
+									"text": "Stock, sizes and checkout are on Shopify; this is where we tell the story."
+								}
+							]
 						}
 					]
 				},
+				"bylines": [
+					{
+						"byline": "byline-studio"
+					}
+				],
 				"taxonomies": {
-					"category": ["general"],
-					"tag": ["starter", "example"]
+					"category": [
+						"lookbook"
+					],
+					"tag": [
+						"the-season",
+						"hoodies"
+					]
+				}
+			},
+			{
+				"id": "post-night-hoodie",
+				"slug": "night-hoodie",
+				"status": "published",
+				"data": {
+					"title": "The Night hoodie, after dark",
+					"excerpt": "The season's darkest piece, in three colours, worn from the last light to the late train home.",
+					"featured_image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1757495404191-e94ed7e70046?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "Night hoodie, worn",
+							"filename": "night-hoodie.jpg"
+						}
+					},
+					"content": [
+						{
+							"_type": "block",
+							"_key": "ks",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "kt",
+									"text": "The Night hoodie is the one we wear most: heavy cotton, a deep hood and a loose fit that layers over everything else."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "ku",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "kv",
+									"text": "It comes in three colours and costs $120."
+								}
+							]
+						}
+					]
+				},
+				"bylines": [
+					{
+						"byline": "byline-studio"
+					}
+				],
+				"taxonomies": {
+					"category": [
+						"lookbook"
+					],
+					"tag": [
+						"the-season",
+						"hoodies"
+					]
+				}
+			},
+			{
+				"id": "post-heavy-cotton",
+				"slug": "heavy-cotton",
+				"status": "published",
+				"data": {
+					"title": "Why heavy cotton",
+					"excerpt": "Clothes that are made to be worn hard start with a heavy cloth. Here is why we use nothing lighter.",
+					"featured_image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "Heavy hoodie, laid flat",
+							"filename": "heavy-cotton.jpg"
+						}
+					},
+					"content": [
+						{
+							"_type": "block",
+							"_key": "kw",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "kx",
+									"text": "A heavy cotton holds its shape, softens with each wash and takes a season of rooftops and pavement without thinning at the elbows."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "ky",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "kz",
+									"text": "The Heavy hoodie"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k10",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k11",
+									"text": "Our heaviest piece, in two colours, at $130. It is the one to buy if you buy one."
+								}
+							]
+						}
+					]
+				},
+				"bylines": [
+					{
+						"byline": "byline-studio"
+					}
+				],
+				"taxonomies": {
+					"category": [
+						"making"
+					],
+					"tag": [
+						"heavy-cotton",
+						"hoodies"
+					]
+				}
+			},
+			{
+				"id": "post-when-its-gone",
+				"slug": "when-its-gone",
+				"status": "published",
+				"data": {
+					"title": "When it's gone, it's gone",
+					"excerpt": "We make each piece in a small run and rarely make it again. The Ordinary tee is this season's proof.",
+					"featured_image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1636047250452-6772f6144b3d?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "Graphic tee, worn",
+							"filename": "when-its-gone.jpg"
+						}
+					},
+					"content": [
+						{
+							"_type": "block",
+							"_key": "k12",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k13",
+									"text": "Small runs mean less left over and more care in each piece. They also mean that a sold-out size may not come back."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k14",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k15",
+									"text": "The Ordinary tee"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k16",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k17",
+									"text": "A heavy tee with a back print, at $55. When this run is gone, the print goes with it."
+								}
+							]
+						}
+					]
+				},
+				"bylines": [
+					{
+						"byline": "byline-studio"
+					}
+				],
+				"taxonomies": {
+					"category": [
+						"making"
+					],
+					"tag": [
+						"small-runs"
+					]
+				}
+			}
+		],
+		"products": [
+			{
+				"id": "product-night-hoodie",
+				"slug": "night-hoodie",
+				"status": "published",
+				"data": {
+					"title": "Night hoodie",
+					"price": "$120",
+					"note": "3 colours",
+					"description": "The season's darkest hoodie: heavy cotton, a deep hood and a loose fit.",
+					"image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1757495404191-e94ed7e70046?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "Night hoodie, worn",
+							"filename": "night-hoodie.jpg"
+						}
+					},
+					"hover_image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1564557287817-3785e38ec1f5?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "A man in a grey hoodie leaning on a wall",
+							"filename": "night-hoodie-2.jpg"
+						}
+					},
+					"shopify_handle": "night-hoodie"
+				},
+				"taxonomies": {
+					"product_collection": [
+						"hoodies"
+					]
+				}
+			},
+			{
+				"id": "product-heavy-hoodie",
+				"slug": "heavy-hoodie",
+				"status": "published",
+				"data": {
+					"title": "Heavy hoodie",
+					"price": "$130",
+					"note": "2 colours",
+					"description": "Our heaviest hoodie, made to be worn hard and washed often.",
+					"image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "Heavy hoodie, laid flat",
+							"filename": "heavy-hoodie.jpg"
+						}
+					},
+					"hover_image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1578854955076-970394ef2512?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "A man in an orange jacket and a white cap sitting on the pavement",
+							"filename": "heavy-hoodie-2.jpg"
+						}
+					},
+					"shopify_handle": "heavy-hoodie"
+				},
+				"taxonomies": {
+					"product_collection": [
+						"hoodies"
+					]
+				}
+			},
+			{
+				"id": "product-ordinary-tee",
+				"slug": "ordinary-tee",
+				"status": "published",
+				"data": {
+					"title": "Ordinary tee",
+					"price": "$55",
+					"note": "Back print",
+					"description": "A heavy cotton tee with a print on the back.",
+					"image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1636047250452-6772f6144b3d?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "Graphic tee, worn",
+							"filename": "ordinary-tee.jpg"
+						}
+					},
+					"hover_image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1588117260148-b47818741c74?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "A woman in a grey tee and grey sweatpants sitting on a concrete bench",
+							"filename": "ordinary-tee-2.jpg"
+						}
+					},
+					"shopify_handle": "ordinary-tee"
+				},
+				"taxonomies": {
+					"product_collection": [
+						"tees"
+					]
+				}
+			},
+			{
+				"id": "product-loop-sweatpant",
+				"slug": "loop-sweatpant",
+				"status": "published",
+				"data": {
+					"title": "Loop sweatpant",
+					"price": "$95",
+					"note": "Grey marl",
+					"description": "A loopback sweatpant in grey marl, cut loose for the roof and the street.",
+					"image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1588117260148-b47818741c74?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "Loop sweatpant, worn on a rooftop",
+							"filename": "loop-sweatpant.jpg"
+						}
+					},
+					"hover_image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1636047250452-6772f6144b3d?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "A man in a tee printed with out of the ordinary",
+							"filename": "loop-sweatpant-2.jpg"
+						}
+					},
+					"shopify_handle": "loop-sweatpant"
+				},
+				"taxonomies": {
+					"product_collection": [
+						"bottoms"
+					]
+				}
+			},
+			{
+				"id": "product-sand-hoodie",
+				"slug": "sand-hoodie",
+				"status": "published",
+				"data": {
+					"title": "Sand hoodie",
+					"price": "$120",
+					"note": "Sand",
+					"description": "The Night hoodie's cut in a pale sand colour.",
+					"image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1564557287817-3785e38ec1f5?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "Sand hoodie, worn leaning on a wall",
+							"filename": "sand-hoodie.jpg"
+						}
+					},
+					"shopify_handle": "sand-hoodie"
+				},
+				"taxonomies": {
+					"product_collection": [
+						"hoodies"
+					]
+				}
+			},
+			{
+				"id": "product-coach-jacket",
+				"slug": "coach-jacket",
+				"status": "published",
+				"data": {
+					"title": "Coach jacket",
+					"price": "$160",
+					"note": "Orange",
+					"description": "A light coach jacket for the season's cooler nights.",
+					"image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1578854955076-970394ef2512?w=1600&q=80&fm=jpg&fit=max",
+							"alt": "A man in an orange coach jacket sitting on the pavement",
+							"filename": "coach-jacket.jpg"
+						}
+					},
+					"shopify_handle": "coach-jacket"
+				},
+				"taxonomies": {
+					"product_collection": [
+						"outerwear"
+					]
 				}
 			}
 		]
